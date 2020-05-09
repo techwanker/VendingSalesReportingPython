@@ -47,10 +47,10 @@ setup(
     version=__version__,
     license="Apache License 2.0",
     author="Jim Schmidt",
-    author_email="james.joseph.schmidt+github@gmail.com",
+    author_email="tech.wanker@gmail.com",
     url="http://github.com/pacificdataservices/",
     description="Sales Reporting",
-    long_description=open("docs/README.rst").read(),
+    long_description=open("pdssr/docs/README.rst").read(),
     packages=["pdssr"],
     classifiers=[
         'Development Status :: 5 - Experimental/Beta',

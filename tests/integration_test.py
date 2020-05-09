@@ -39,9 +39,17 @@ class IntegrationTest(unittest.TestCase):
 
         if DIALECT == dialects.DIALECT_SQLITE:
             cls.connection = cls.get_sqlite_connection()
-            runner = SqlRunner(get_file_path("../config/sales_reporting_ddl_sqlite.sql"), cls.connection)
         elif DIALECT == dialects.DIALECT_POSTGRES:
             cls.connection = cls.get_postgres_connection()
+        else:
+            raise Exception("unsupported dialect '%s'" % DIALECT)
+
+        runner = SqlRunner(get_file_path("../config/ut_condition_tables.sr.sql"), cls.connection)
+        runner.process()
+
+        if DIALECT == dialects.DIALECT_SQLITE:
+            runner = SqlRunner(get_file_path("../config/sales_reporting_ddl_sqlite.sql"), cls.connection)
+        elif DIALECT == dialects.DIALECT_POSTGRES:
             runner = SqlRunner(get_file_path("../config/sales_reporting_ddl.sql"), cls.connection)
         else:
             raise Exception("unsupported dialect '%s'" % DIALECT)
@@ -50,8 +58,6 @@ class IntegrationTest(unittest.TestCase):
 
         SeedSalesReportingDatabase(cls.connection).process()
 
-        runner = SqlRunner(get_file_path("../config/ut_condition_tables.sr.sql"), cls.connection)
-        runner.process()
 
 
     @classmethod
@@ -68,13 +74,14 @@ class IntegrationTest(unittest.TestCase):
 
     @classmethod
     def get_postgres_connection(cls):  # TODO externalize use - test schema to initialize
-        db_url = "postgres:host='localhost' dbname='sales_reporting_db' user='jjs' password='jjs'"  # TODO externalize
+        db_url = "postgres:host='localhost' dbname='sales_reporting' user='jjs' password='jjs'"  # TODO externalize
         cls.connection =  ConnectionHelper.get_connection(db_url)
         cursor = cls.connection.cursor()
         schema = "integration_test"
         cursor.execute("create schema %s" % schema)
         cursor.execute("set schema '%s'" % schema)
         return cls.connection
+
 
 
 

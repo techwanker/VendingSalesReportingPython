@@ -58,8 +58,18 @@ class SeedSalesReportingDatabase:
     def seed_distributor(self):
         self.cursor.execute("insert into org(org_cd) values ( %(ORG_CD)s)", {"ORG_CD": "EXOTICTX"})
 
-        self.cursor.execute("insert into org_distrib(org_id) "
-                            "select org_id "
+
+        print('EXOTICTX inserted into org')
+        verify_cursor = CursorHelper(self.connection.cursor())
+        rows = verify_cursor.execute('select * from org order by org_cd')
+        
+        for row in rows:
+            print('org_id ' + str(row[0]) + ' org_cd ' + row[1])
+
+        
+
+        self.cursor.execute("insert into org_distrib(org_id,distrib_id) "
+                            "select org_id,'EXOTICTX' "
                             "from org "
                             "where org_cd = %(ORG_CD)s", {"ORG_CD": "EXOTICTX"})
 
