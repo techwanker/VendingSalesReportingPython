@@ -56,7 +56,6 @@ class CdsDataloadConditions:
         processor = ConditionIdentification(conn, self.rules)
         processor.process(binds, verbosity=3)
 
-
 def main():
     #
     # parser = argparse.ArgumentParser(description='load a file')
